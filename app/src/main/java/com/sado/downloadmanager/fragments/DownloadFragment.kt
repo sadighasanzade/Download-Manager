@@ -1,33 +1,26 @@
 package com.sado.downloadmanager.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.sado.downloadmanager.R
+import kotlin.math.log
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DownloadFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DownloadFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var chipGroup: ChipGroup
+    private lateinit var youtubeChip : Chip
+    private lateinit var facebookChip : Chip
+    private lateinit var instagramChip : Chip
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -38,23 +31,53 @@ class DownloadFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_download, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DownloadFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DownloadFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        chipGroup = view.findViewById(R.id.chip_group_choice)
+        youtubeChip = view.findViewById(R.id.chip_youtube)
+        facebookChip = view.findViewById(R.id.chip_facebook)
+        instagramChip = view.findViewById(R.id.chip_instagram)
+
+        //default youtube should be selected
+        if(youtubeChip.isChecked) {
+            youtubeChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.blue))
+            youtubeChip.setTextColor(requireContext().getColor(R.color.white))
+        }
+        chipGroup.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.chip_instagram -> {
+                    instagramChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.blue))
+                    facebookChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.open_blue))
+                    youtubeChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.open_blue))
+
+                    instagramChip.setTextColor(requireContext().getColor(R.color.white))
+                    facebookChip.setTextColor(requireContext().getColor(R.color.black))
+                    youtubeChip.setTextColor(requireContext().getColor(R.color.black))
+                }
+
+                R.id.chip_facebook -> {
+                    instagramChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.open_blue))
+                    facebookChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.blue))
+                    youtubeChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.open_blue))
+
+                    instagramChip.setTextColor(requireContext().getColor(R.color.black))
+                    facebookChip.setTextColor(requireContext().getColor(R.color.white))
+                    youtubeChip.setTextColor(requireContext().getColor(R.color.black))
+                }
+
+                R.id.chip_youtube -> {
+                    instagramChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.open_blue))
+                    facebookChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.open_blue))
+                    youtubeChip.chipBackgroundColor = ColorStateList.valueOf(requireContext().getColor(R.color.blue))
+
+                    instagramChip.setTextColor(requireContext().getColor(R.color.black))
+                    facebookChip.setTextColor(requireContext().getColor(R.color.black))
+                    youtubeChip.setTextColor(requireContext().getColor(R.color.white))
+
                 }
             }
+        }
     }
+
+
 }
